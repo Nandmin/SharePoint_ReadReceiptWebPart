@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.15.0",
+    "libraryName": "read-receipt",
+    "libraryId": "c0a2e523-748c-48dc-ac8b-e928216b2b8d",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "read-receipt",
+    "solutionShortDescription": "read-receipt description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

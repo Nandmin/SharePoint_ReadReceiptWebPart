@@ -1,0 +1,21 @@
+0. npm i node -g
+1. npm i gulp --g
+2. npm i yo --g
+3. npm i @microsoft/generator-sharepoint --g
+
+Start yo
+	Kiválaszt microsoft generator
+	Kérdésekre értelemszerűen válaszolni
+
+A serve.json-ban beállítani a site címét
+gulp build
+gulp.cmd trust-dev-cert
+gulp.cmd serve
+
+Létrheozza a webpartot, kiválasztani a listából
+Components-ben módosíthatók a filek
+
+npm i @pnp/sp
+npm i @pnp/spfx-property-controls --save
+npm i @pnp/spfx-controls-react --save
+
