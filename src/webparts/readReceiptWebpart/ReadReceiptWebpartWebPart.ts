@@ -1,10 +1,7 @@
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { Version } from '@microsoft/sp-core-library';
-import {
-  IPropertyPaneConfiguration,
-  PropertyPaneTextField
-} from '@microsoft/sp-property-pane';
+import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
 
@@ -14,34 +11,73 @@ import { IReadReceiptWebpartProps } from './components/IReadReceiptWebpartProps'
 import { sp } from '@pnp/sp/presets/all';
 import { PropertyFieldListPicker, PropertyFieldListPickerOrderBy } from '@pnp/spfx-property-controls/lib/PropertyFieldListPicker';
 
+import { ThemeProvider, ThemeChangedArgs  } from '@microsoft/sp-component-base'
+import { __makeTemplateObject } from 'tslib';
+
 export interface IReadReceiptWebpartWebPartProps {
-  description: string;
+  documentTitle: string; // description: string;
+  storageList: string;
+  acknoledgementLabel: string;
+  acknoledgementMessage: string;
+  readMessage: string;
 }
 
 export default class ReadReceiptWebpartWebPart extends BaseClientSideWebPart<IReadReceiptWebpartWebPartProps> {
 
   private _isDarkTheme: boolean = false;
   private _environmentMessage: string = '';
+  private _themeProvider: ThemeProvider;
+  private _themeVariant: IReadonlyTheme | undefined;
 
   public render(): void {
     const element: React.ReactElement<IReadReceiptWebpartProps> = React.createElement(
       ReadReceiptWebpart,
       {
-        description: this.properties.description,
-        isDarkTheme: this._isDarkTheme,
-        environmentMessage: this._environmentMessage,
-        hasTeamsContext: !!this.context.sdks.microsoftTeams,
-        userDisplayName: this.context.pageContext.user.displayName
+        // description: this.properties.description,
+        // isDarkTheme: this._isDarkTheme,
+        // environmentMessage: this._environmentMessage,
+        // hasTeamsContext: !!this.context.sdks.microsoftTeams,
+        // userDisplayName: this.context.pageContext.user.displayName
+
+        documentTitle: this.properties.documentTitle,
+        currentUserDisplayName: this.context.pageContext.user.displayName,
+        storageList: this.properties.storageList,
+        acknoledgementLabel: this.properties.acknoledgementLabel,
+        acknoledgementMessage: this.properties.acknoledgementMessage,
+        readMessage: this.properties.readMessage,
+        themeVariant: this._themeVariant,
+        configured: this.properties.storageList ? this.properties.storageList !== '' : false,
+        context: this.context
       }
     );
 
     ReactDom.render(element, this.domElement);
   }
 
-  protected onInit(): Promise<void> {
+  protected async onInit(): Promise<void> {
     this._environmentMessage = this._getEnvironmentMessage();
 
-    return super.onInit();
+    //return super.onInit();
+
+    await super.onInit();
+
+    sp.setup(this.context);
+
+    this._themeProvider = this.context.serviceScope.consume(
+      ThemeProvider.serviceKey
+    );
+
+    this._themeVariant = this._themeProvider.tryGetTheme();
+
+    this._themeProvider.themeChangedEvent.add(
+      this, this._handleThemeChangedEvent
+    );
+
+  }
+
+  private _handleThemeChangedEvent(args: ThemeChangedArgs): void {
+    this._themeVariant = args.theme;
+    this.render();
   }
 
   private _getEnvironmentMessage(): string {
@@ -89,9 +125,21 @@ export default class ReadReceiptWebpartWebPart extends BaseClientSideWebPart<IRe
             {
               groupName: strings.BasicGroupName,
               groupFields: [
-                PropertyPaneTextField('description', {
-                  label: strings.DescriptionFieldLabel
-                })
+                PropertyFieldListPicker('storageList', {
+                  label: strings.StorageListLabel,
+                  selectedList: this.properties.storageList,
+                  includeHidden: false,
+                  orderBy: PropertyFieldListPickerOrderBy.Title,
+                  disabled: false,
+                  onPropertyChange: this.onPropertyPaneFieldChanged.bind(this),
+                  properties: this.properties,
+                  context: this.context,
+                  onGetErrorMessage: null,
+                  deferredValidationTime: 0,
+                  key:'listPickerFieldId',
+                  multiSelect: false,
+                  baseTemplate: 100
+                }),
               ]
             }
           ]
