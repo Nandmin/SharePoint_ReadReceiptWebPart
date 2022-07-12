@@ -5,8 +5,8 @@ export interface IReadReceiptWebpartProps {
   documentTitle: string;
   currentUserDisplayName: string;
   storageList: string;
-  acknoledgementLabel: string;
-  acknoledgementMessage: string;
+  acknowledgementLabel: string;
+  acknowledgementMessage: string;
   readMessage: string;
   themeVariant: IReadonlyTheme | undefined;
   configured: boolean;

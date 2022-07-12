@@ -5,7 +5,6 @@ import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
 
-import * as strings from 'ReadReceiptWebpartWebPartStrings';
 import ReadReceiptWebpart from './components/ReadReceiptWebpart';
 import { IReadReceiptWebpartProps } from './components/IReadReceiptWebpartProps';
 import { sp } from '@pnp/sp/presets/all';
@@ -13,6 +12,7 @@ import { PropertyFieldListPicker, PropertyFieldListPickerOrderBy } from '@pnp/sp
 
 import { ThemeProvider, ThemeChangedEventArgs  } from '@microsoft/sp-component-base';
 import { __makeTemplateObject } from 'tslib';
+import * as strings from 'ReadReceiptWebpartWebPartStrings';
 
 export interface IReadReceiptWebpartWebPartProps {
   documentTitle: string; // description: string;
@@ -54,6 +54,7 @@ export default class ReadReceiptWebpartWebPart extends BaseClientSideWebPart<IRe
     ReactDom.render(element, this.domElement);
   }
 
+  // eslint-disable-next-line @microsoft/spfx/no-async-await
   protected async onInit(): Promise<void> {
    // this._environmentMessage = this._getEnvironmentMessage();
 
@@ -74,7 +75,7 @@ export default class ReadReceiptWebpartWebPart extends BaseClientSideWebPart<IRe
     );
   }
 
-  private _handleThemeChangedEvent(args: ThemeChangedArgs): void {
+  private _handleThemeChangedEvent(args: ThemeChangedArgs): any {
     this._themeVariant = args.theme;
     this.render();
   }
