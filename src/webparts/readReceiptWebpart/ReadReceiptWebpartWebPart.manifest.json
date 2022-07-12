@@ -21,7 +21,9 @@
     "description": { "default": "Record when a user has read a document" },
     "officeFabricIconFontName": "DocumentApproval",
     "properties": {
-      "description": "ReadReceiptWebpart"
+      "acknoledgementLabel": "Confirm",
+      "acknowledgementMessage": "Tick to acknowledge you read the document",
+      "readMessage": "You have already acknowledged this document"
     }
   }]
 }

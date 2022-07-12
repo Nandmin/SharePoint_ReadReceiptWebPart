@@ -11,14 +11,14 @@ import { IReadReceiptWebpartProps } from './components/IReadReceiptWebpartProps'
 import { sp } from '@pnp/sp/presets/all';
 import { PropertyFieldListPicker, PropertyFieldListPickerOrderBy } from '@pnp/spfx-property-controls/lib/PropertyFieldListPicker';
 
-import { ThemeProvider, ThemeChangedArgs  } from '@microsoft/sp-component-base'
+import { ThemeProvider, ThemeChangedEventArgs  } from '@microsoft/sp-component-base';
 import { __makeTemplateObject } from 'tslib';
 
 export interface IReadReceiptWebpartWebPartProps {
   documentTitle: string; // description: string;
   storageList: string;
-  acknoledgementLabel: string;
-  acknoledgementMessage: string;
+  acknowledgementLabel: string;
+  acknowledgementMessage: string;
   readMessage: string;
 }
 
@@ -42,8 +42,8 @@ export default class ReadReceiptWebpartWebPart extends BaseClientSideWebPart<IRe
         documentTitle: this.properties.documentTitle,
         currentUserDisplayName: this.context.pageContext.user.displayName,
         storageList: this.properties.storageList,
-        acknoledgementLabel: this.properties.acknoledgementLabel,
-        acknoledgementMessage: this.properties.acknoledgementMessage,
+        acknowledgementLabel: this.properties.acknowledgementLabel,
+        acknowledgementMessage: this.properties.acknowledgementMessage,
         readMessage: this.properties.readMessage,
         themeVariant: this._themeVariant,
         configured: this.properties.storageList ? this.properties.storageList !== '' : false,
@@ -55,7 +55,7 @@ export default class ReadReceiptWebpartWebPart extends BaseClientSideWebPart<IRe
   }
 
   protected async onInit(): Promise<void> {
-    this._environmentMessage = this._getEnvironmentMessage();
+   // this._environmentMessage = this._getEnvironmentMessage();
 
     //return super.onInit();
 
@@ -72,7 +72,6 @@ export default class ReadReceiptWebpartWebPart extends BaseClientSideWebPart<IRe
     this._themeProvider.themeChangedEvent.add(
       this, this._handleThemeChangedEvent
     );
-
   }
 
   private _handleThemeChangedEvent(args: ThemeChangedArgs): void {
@@ -140,6 +139,18 @@ export default class ReadReceiptWebpartWebPart extends BaseClientSideWebPart<IRe
                   multiSelect: false,
                   baseTemplate: 100
                 }),
+                PropertyPaneTextField('documentTitle', {
+                  label: strings.DocumentTitleLabel
+                }),
+                PropertyPaneTextField('acknowledgementLabel', {
+                  label: strings.AcknowledgementLabelLabel
+                }),
+                PropertyPaneTextField('acknowledgementMessage', {
+                  label: strings.AcknowledgementMessageLabel
+                }),
+                PropertyPaneTextField('readMessage', {
+                  label: strings.ReadMessageLabel
+                })
               ]
             }
           ]
